@@ -13,7 +13,7 @@ export default {
     // Checks if the card should be visible
     isVisible() {
       if (this.todisplay.length === 0) return true;
-      return this.movie.id.some(r => this.todisplay.includes(r))
+      return this.movie.id.some(id => this.todisplay.includes(id));
     }
   }
 }

@@ -1,4 +1,4 @@
 export default {
-    '/': 'Index',
-    '/movies': 'Movies'
-  }
+  '/': 'Index',
+  '/movies': 'Movies'
+};

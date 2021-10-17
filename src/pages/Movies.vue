@@ -87,11 +87,11 @@ export default {
               active: false
             });
           }
-        })
-        .catch(error => {
-          console.log(error)
-        });;
+        });
       })
+      .catch(error => {
+        console.log(error)
+      });
     },
 
     // Get all the filters that are selected and return their id

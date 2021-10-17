@@ -1,5 +1,5 @@
-import { createApp, h } from 'vue'
-import routes from './routes'
+import { createApp, h } from 'vue';
+import routes from './routes';
 
 const SimpleRouterApp = {
     data: () => ({
@@ -9,7 +9,7 @@ const SimpleRouterApp = {
     computed: {
       ViewComponent () {
         const matchingPage = routes[this.currentRoute] || '404';
-        return require(`./pages/${matchingPage}.vue`).default
+        return require(`./pages/${matchingPage}.vue`).default;
       }
     },
   
@@ -24,4 +24,4 @@ const SimpleRouterApp = {
     }
   }
   
-  createApp(SimpleRouterApp).mount('#app')
+  createApp(SimpleRouterApp).mount('#app');
