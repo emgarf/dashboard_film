@@ -30,12 +30,11 @@ export default {
   transition: transform 0.2s;
 }
 
-.slide-fade-enter-active {
-  transition: all .3s!important;
-}
+.slide-fade-enter-active,
 .slide-fade-leave-active {
   transition: all .3s;
 }
+
 .slide-fade-enter-from, .slide-fade-leave-to {
   transform: translateX(10px);
   opacity: 0;

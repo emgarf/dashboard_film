@@ -46,7 +46,7 @@ export default {
     generateMovies() {
       const base_url = "https://image.tmdb.org/t/p/";
       const image_width = "w342";
-      const movies_to_display = '4';
+      const movies_to_display = '20';
 
       fetch("https://api.themoviedb.org/3/movie/top_rated?api_key=481c25c2b716fb8857c4f4693b91554d&page=1")
         .then(response => response.json())
