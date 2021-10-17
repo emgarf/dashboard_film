@@ -9,6 +9,7 @@
     </section>
 
     <section>
+      <p class="error" v-if="fetch_error !== ''">{{fetch_error}}</p>
       <ul class="movies">
         <BaseCard v-for="movie in movies" :key="movie.poster_path" :movie="movie" :todisplay="displayMovieCards()"/>
       </ul>
@@ -17,9 +18,9 @@
 </template>
 
 <script>
-import Header from '../../components/Header.vue'
-import BaseCard from '../../components/BaseCard.vue';
-import BaseFilter from '../../components/BaseFilter.vue';
+import Header from '../components/Header.vue'
+import BaseCard from '../components/BaseCard.vue';
+import BaseFilter from '../components/BaseFilter.vue';
 
 export default {
   name: 'App',
@@ -34,6 +35,7 @@ export default {
       filters: [],
       movies: [],
       genres_ids: [],
+      fetch_error: "",
     }
   },
 
@@ -48,6 +50,7 @@ export default {
       const image_width = "w342";
       const movies_to_display = '20';
 
+      // fetch the top rated movies and store some datas in the "movies" list variable
       fetch("https://api.themoviedb.org/3/movie/top_rated?api_key=481c25c2b716fb8857c4f4693b91554d&page=1")
         .then(response => response.json())
         .then(data => {
@@ -63,10 +66,14 @@ export default {
             });
           }
           // Make the values of the list unique
-          this.genres_ids = [...new Set(this.genres_ids)]
+          this.genres_ids = [...new Set(this.genres_ids)];
+        })
+        .catch(() => {
+          this.fetch_error = 'Un problème est survenu lors du chargement de vos films... :(';
         });
     },
 
+    // fetch the genre datas and store some datas in the "filters" list variable
     generateFilters() {
       fetch("https://api.themoviedb.org/3/genre/movie/list?api_key=481c25c2b716fb8857c4f4693b91554d&language=en-US")
       .then(response => response.json())
@@ -80,10 +87,14 @@ export default {
               active: false
             });
           }
-        });
+        })
+        .catch(error => {
+          console.log(error)
+        });;
       })
     },
 
+    // Get all the filters that are selected and return their id
     displayMovieCards() {
       const id = [];
       this.filters.forEach(filter => {
@@ -94,12 +105,9 @@ export default {
       return id;
     },
 
+    // Toggle the filter onclick
     selectGenre(filter) {
-      if (filter.active === true) {
-        filter.active = false;
-      } else {
-        filter.active = true;
-      }
+      filter.active = filter.active === false;
     }
   }
 }
@@ -118,13 +126,21 @@ body {
   background: #313131;
 }
 
+.error {
+  color: white;
+  width: 100%;
+  padding: 20px 40px;
+  font-size: 25px;
+  text-align: center;
+}
+
 .movies {
   display: flex;
   flex-wrap: wrap;
   column-gap: 20px;
   row-gap: 20px;
   padding: 0 20px 50px;
-  justify-content: space-between;
+  justify-content: center;
   margin: 0;
 }
 

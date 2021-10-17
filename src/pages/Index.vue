@@ -9,6 +9,7 @@
 
     <section>
       <ul class="movies">
+        <p class="error" v-if="fetch_error !== ''">{{fetch_error}}</p>
         <BaseCard v-for="movie in movies" :key="movie.poster_path" :movie="movie" :todisplay="[]"/>
       </ul>
     </section>
@@ -16,8 +17,8 @@
 </template>
 
 <script>
-import Header from '../../components/Header.vue'
-import BaseCard from '../../components/BaseCard.vue';
+import Header from '../components/Header.vue'
+import BaseCard from '../components/BaseCard.vue';
 
 export default {
   name: 'App',
@@ -27,7 +28,8 @@ export default {
   },
   data() {
     return {
-      movies: []
+      movies: [],
+      fetch_error: ""
     }
   },
   mounted() {
@@ -35,6 +37,7 @@ export default {
     const image_width = "w342";
     const movies_to_display = '4';
 
+    // fetch the top rated movies and store some datas in the "movies" list variable
     fetch("https://api.themoviedb.org/3/movie/top_rated?api_key=481c25c2b716fb8857c4f4693b91554d&language=en-US&page=1")
       .then(response => response.json())
       .then(data => {
@@ -46,7 +49,11 @@ export default {
             poster_path: base_url + image_width + result.poster_path
           });
         }
+      })
+      .catch(() => {
+        this.fetch_error = "Un problème est survenu lors du chargement de vos films... :(";
       });
+      
   }
 }
 </script>
@@ -61,7 +68,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
-  background-image: url('../../assets/affiche_background.jpg');
+  background-image: url('../assets/affiche_background.jpg');
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -70,7 +77,16 @@ body {
 
 @font-face {
   font-family: "kaamelott";
-  src: url("../../assets/kaamelott.ttf");
+  src: url("../assets/kaamelott.ttf");
+}
+
+.error {
+  color: white;
+  width: 100%;
+  padding: 20px 40px;
+  background-color: rgba(0,0,0,0.4);
+  font-size: 25px;
+  text-align: center;
 }
 
 /* Main movie part */
@@ -103,7 +119,7 @@ body {
   column-gap: 20px;
   row-gap: 20px;
   padding: 0 20px 50px;
-  justify-content: space-between;
+  justify-content: center;
   margin: 0;
 }
 

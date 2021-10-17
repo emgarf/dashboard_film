@@ -10,6 +10,7 @@
 export default {
   props: ['movie', 'todisplay'],
   methods: {
+    // Checks if the card should be visible
     isVisible() {
       if (this.todisplay.length === 0) return true;
       return this.movie.id.some(r => this.todisplay.includes(r))
