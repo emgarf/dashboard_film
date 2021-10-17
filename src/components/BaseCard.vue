@@ -1,5 +1,5 @@
 <template>
-  <transition name="fade">
+  <transition name="slide-fade">
     <li class="movie" v-if="isVisible() === true">
       <img class="movie__image" :src="movie.poster_path">
     </li>
@@ -28,6 +28,21 @@ export default {
   list-style-type: none;
   box-shadow: 0px 0px 10px 4px rgb(0 0 0 / 50%);
   transition: transform 0.2s;
+}
+
+.slide-fade-enter-active {
+  transition: all .3s!important;
+}
+.slide-fade-leave-active {
+  transition: all .3s;
+}
+.slide-fade-enter-from, .slide-fade-leave-to {
+  transform: translateX(10px);
+  opacity: 0;
+}
+
+.fade-enter-to {
+  opacity: 1;
 }
 
 .movie:hover {

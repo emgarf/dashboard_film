@@ -1,10 +1,10 @@
 module.exports = {
     pages: {
-      home: {
-        entry: './src/pages/home/main.js',
+      index: {
+        entry: './src/pages/index/main.js',
         template: 'public/index.html',
         title: 'Dashboard',
-        chunks: ['chunk-vendors', 'chunk-common', 'home']
+        chunks: ['chunk-vendors', 'chunk-common', 'index']
       },
       movies: {
         entry: './src/pages/movies/main.js',
