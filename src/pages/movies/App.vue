@@ -4,13 +4,13 @@
 
     <section>
       <ul class="categories">
-        <BaseFilter v-for="genre in genres_names" :key="genre" :genre="genre" @click="toggleActiveOnLetter(movie)"/>
+        <BaseFilter v-for="filter in filters" :key="filter.id" :filter="filter" @click="selectGenre(filter)"/>
       </ul>
     </section>
 
     <section>
       <ul class="movies">
-        <BaseCard v-for="movie in movies" :key="movie" :movie="movie"/>
+        <BaseCard v-for="movie in movies" :key="movie.poster_path" :movie="movie" :todisplay="displayMovieCards()"/>
       </ul>
     </section>
   </div>
@@ -28,41 +28,79 @@ export default {
     BaseCard,
     BaseFilter
   },
+
   data() {
     return {
+      filters: [],
       movies: [],
       genres_ids: [],
-      genres_names: [],
     }
   },
+
   mounted() {
-    const base_url = "https://image.tmdb.org/t/p/";
-    const image_width = "w342";
-    const movies_to_display = '4';
+    this.generateMovies();
+    this.generateFilters();
+  },
 
-    fetch("https://api.themoviedb.org/3/movie/top_rated?api_key=481c25c2b716fb8857c4f4693b91554d&page=1")
-      .then(response => response.json())
-      .then(data => {
-        for (const [index, result] of Object.entries(data.results)) {
-          if (index === movies_to_display) break;
+  methods: {
+    generateMovies() {
+      const base_url = "https://image.tmdb.org/t/p/";
+      const image_width = "w342";
+      const movies_to_display = '4';
 
-          this.genres_ids = [...this.genres_ids, ...result.genre_ids];
-          this.movies.push(base_url + image_width + result.poster_path);
-        }
-        // Make the values of the list unique
-        this.genres_ids = [...new Set(this.genres_ids)]
-      });
+      fetch("https://api.themoviedb.org/3/movie/top_rated?api_key=481c25c2b716fb8857c4f4693b91554d&page=1")
+        .then(response => response.json())
+        .then(data => {
+          for (const [index, result] of Object.entries(data.results)) {
+            if (index === movies_to_display) break;
 
+            this.genres_ids = [...this.genres_ids, ...result.genre_ids];
 
-    fetch("https://api.themoviedb.org/3/genre/movie/list?api_key=481c25c2b716fb8857c4f4693b91554d&language=en-US")
+            // genreate the movies object
+            this.movies.push({
+              id: result.genre_ids,
+              poster_path: base_url + image_width + result.poster_path
+            });
+          }
+          // Make the values of the list unique
+          this.genres_ids = [...new Set(this.genres_ids)]
+        });
+    },
+
+    generateFilters() {
+      fetch("https://api.themoviedb.org/3/genre/movie/list?api_key=481c25c2b716fb8857c4f4693b91554d&language=en-US")
       .then(response => response.json())
       .then(data => { 
         data.genres.forEach(element => {
+          // genreate the filters object for the existing id of genres
           if (this.genres_ids.includes(element.id) === true) {
-            this.genres_names.push(element.name);
+            this.filters.push({
+              id: element.id,
+              name: element.name,
+              active: false
+            });
           }
         });
       })
+    },
+
+    displayMovieCards() {
+      const id = [];
+      this.filters.forEach(filter => {
+        if (filter.active === true) {
+          id.push(filter.id);
+        }
+      });
+      return id;
+    },
+
+    selectGenre(filter) {
+      if (filter.active === true) {
+        filter.active = false;
+      } else {
+        filter.active = true;
+      }
+    }
   }
 }
 </script>
@@ -86,7 +124,7 @@ body {
   column-gap: 20px;
   row-gap: 20px;
   padding: 0 20px 50px;
-  justify-content: space-evenly;
+  justify-content: space-between;
   margin: 0;
 }
 

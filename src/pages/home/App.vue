@@ -9,7 +9,7 @@
 
     <section>
       <ul class="movies">
-        <BaseCard v-for="movie in movies" :key="movie" :movie="movie"/>
+        <BaseCard v-for="movie in movies" :key="movie.poster_path" :movie="movie" :todisplay="[]"/>
       </ul>
     </section>
   </div>
@@ -41,8 +41,11 @@ export default {
         for (const [index, result] of Object.entries(data.results)) {
           if (index === movies_to_display) break;
 
-          this.movies.push(base_url + image_width + result.poster_path);
-        }   
+          // genreate the movies object
+          this.movies.push({
+            poster_path: base_url + image_width + result.poster_path
+          });
+        }
       });
   }
 }
@@ -100,7 +103,7 @@ body {
   column-gap: 20px;
   row-gap: 20px;
   padding: 0 20px 50px;
-  justify-content: space-evenly;
+  justify-content: space-between;
   margin: 0;
 }
 

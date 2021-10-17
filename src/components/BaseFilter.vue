@@ -1,12 +1,12 @@
 <template>
-    <li class="category">
-        <span>{{genre}}</span>
+    <li class="category" :class="{ 'active': filter.active }">
+        <span>{{filter.name}}</span>
     </li>
 </template>
 
 <script>
 export default {
-  props: ['genre'],
+  props: ['filter'],
 }
 </script>
 
@@ -23,12 +23,13 @@ export default {
     cursor: pointer;
 }
 
-.category:hover {
+.category:hover,
+.active {
     background-color: #fff;
     color: #2b2b2b;
 }
 
-@media screen and (min-width: 1280px) {
-  
+.active:hover {
+    background-color: #ebedf6;
 }
 </style>

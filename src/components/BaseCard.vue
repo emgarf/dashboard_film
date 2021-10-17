@@ -1,13 +1,23 @@
 <template>
-    <li class="movie">
-        <img class="movie__image" :src="movie">
+  <transition name="fade">
+    <li class="movie" v-if="isVisible() === true">
+      <img class="movie__image" :src="movie.poster_path">
     </li>
+  </transition>
 </template>
 
 <script>
-export default {
-  props: ['movie'],
-}
+import Vue from 'vue';
+
+export default Vue.extend({
+  props: ['movie', 'todisplay'],
+  methods: {
+    isVisible() {
+      if (this.todisplay.length === 0) return true;
+      return this.movie.id.some(r => this.todisplay.includes(r))
+    }
+  }
+})
 </script>
 
 <style scoped>
