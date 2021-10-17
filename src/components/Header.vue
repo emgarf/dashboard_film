@@ -1,7 +1,7 @@
 <template>
   <header>
-    <a href="/"><img src="../assets/logo.svg" alt="logo"></a>
-    <a class="link" href="./movie-list" title="liste des films">Liste des films</a>
+    <a href="./home"><img src="../assets/logo.svg" alt="logo"></a>
+    <a class="link" href="./movies" title="liste des films">Liste des films</a>
   </header>
 </template>
 

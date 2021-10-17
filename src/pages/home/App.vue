@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <Header msg="Welcome to Your Vue.js App"/>
+    <Header/>
     
     <section class="main-movie">
       <h1 class="main-movie__title">KAAMELOTT</h1>
@@ -8,42 +8,41 @@
     </section>
 
     <section>
-      <Showcase movies=""/>
-      <ul class="showcase">
-        <li class="showcase__movie" v-for="movie in movies" v-bind:key="movie">
-          <img class="showcase__image" :src="movie">
-        </li>
+      <ul class="movies">
+        <BaseCard v-for="movie in movies" :key="movie" :movie="movie"/>
       </ul>
     </section>
   </div>
 </template>
 
 <script>
-import Header from './components/Header.vue'
-import Showcase from './components/Showcase.vue';
+import Header from '../../components/Header.vue'
+import BaseCard from '../../components/BaseCard.vue';
 
 export default {
   name: 'App',
   components: {
     Header,
-    Showcase
+    BaseCard
   },
   data() {
     return {
-      movies: [],
-      main_movie: ""
+      movies: []
     }
   },
   mounted() {
     const base_url = "https://image.tmdb.org/t/p/";
     const image_width = "w342";
+    const movies_to_display = '4';
 
     fetch("https://api.themoviedb.org/3/movie/top_rated?api_key=481c25c2b716fb8857c4f4693b91554d&language=en-US&page=1")
       .then(response => response.json())
       .then(data => {
-        data.results.forEach(result => {
-          this.movies.push(base_url + image_width + result.poster_path)
-        });
+        for (const [index, result] of Object.entries(data.results)) {
+          if (index === movies_to_display) break;
+
+          this.movies.push(base_url + image_width + result.poster_path);
+        }   
       });
   }
 }
@@ -58,9 +57,8 @@ body {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  box-sizing: border-box;
   min-height: 100vh;
-  background-image: url('./assets/affiche_background.jpg');
+  background-image: url('../../assets/affiche_background.jpg');
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -69,7 +67,7 @@ body {
 
 @font-face {
   font-family: "kaamelott";
-  src: url("./assets/kaamelott.ttf");
+  src: url("../../assets/kaamelott.ttf");
 }
 
 /* Main movie part */
@@ -77,7 +75,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 100px;
+  margin-bottom: 20vh;
 }
 
 .main-movie__title,
@@ -96,7 +94,7 @@ body {
 }
 
 /* Showcase part */
-.showcase {
+.movies {
   display: flex;
   flex-wrap: wrap;
   column-gap: 20px;
@@ -104,26 +102,6 @@ body {
   padding: 0 20px 50px;
   justify-content: space-evenly;
   margin: 0;
-}
-
-.showcase__movie {
-  display: flex;
-  width: 155px;
-  height: 155px;
-  box-shadow: 0px 0px 10px 4px rgb(0 0 0 / 50%);
-  transition: transform 0.2s;
-}
-
-.showcase__movie:hover {
-  cursor: pointer;
-  transform: scale(1.1);
-}
-
-.showcase__image {
-  width: 100%;
-  border-radius: 5px;
-  box-shadow: inset 0 0 10px 10px rgba(0,0,0,0.5);
-  object-fit: cover;
 }
 
 /* For tablet & desktop */
@@ -151,13 +129,8 @@ body {
     font-size: 25px;
   }
 
-  .showcase {
+  .movies {
     padding: 0 40px;
-  }
-
-  .showcase__movie {
-    width: 200px;
-    height: 200px;
   }
 }
 
@@ -167,7 +140,7 @@ body {
     padding-left: 0;
   }
 
-  .showcase {
+  .movies {
     padding: 0 0 50px;
   }
 }
