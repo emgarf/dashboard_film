@@ -7,9 +7,7 @@
 </template>
 
 <script>
-import Vue from 'vue';
-
-export default Vue.extend({
+export default {
   props: ['movie', 'todisplay'],
   methods: {
     isVisible() {
@@ -17,7 +15,7 @@ export default Vue.extend({
       return this.movie.id.some(r => this.todisplay.includes(r))
     }
   }
-})
+}
 </script>
 
 <style scoped>
